@@ -9,8 +9,8 @@ const AssignmentsService = {
     return api.post(`/groups/${groupId}/draw`);
   },
 
-  sendEmails: (groupId) => {
-    return api.post(`/groups/${groupId}/send-emails`);
+  sendEmails: (groupId, data = {}) => {
+    return api.post(`/groups/${groupId}/send-emails`, data);
   },
 };
 

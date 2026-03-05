@@ -11,6 +11,7 @@ import ConfirmDialog from '@/components/shared/ConfirmDialog';
 import GroupForm from './GroupForm';
 import ParticipantsList from '@/components/features/Participants/ParticipantsList';
 import AssignmentsList from '@/components/features/Assignments/AssignmentsList';
+import SendEmailsForm from '@/components/features/Assignments/SendEmailsForm';
 
 export default function GroupDetail() {
   const { id } = useParams();
@@ -78,8 +79,8 @@ export default function GroupDetail() {
     fetchGroup();
   };
 
-  const handleSendEmails = async () => {
-    await execute(() => AssignmentsService.sendEmails(id), {
+  const handleSendEmails = async (emailBody) => {
+    await execute(() => AssignmentsService.sendEmails(id, { fields: { email_body: emailBody } }), {
       successMessage: 'Correus enviats!',
     });
     setSendConfirmOpen(false);
@@ -228,12 +229,12 @@ export default function GroupDetail() {
         onCancel={() => setDrawConfirmOpen(false)}
       />
 
-      <ConfirmDialog
+      <SendEmailsForm
         open={sendConfirmOpen}
-        title="Enviar correus"
-        message={`S'enviaran els correus a tots els ${participantCount} participants amb la seva assignació. Continuar?`}
-        onConfirm={handleSendEmails}
-        onCancel={() => setSendConfirmOpen(false)}
+        emailBody={fields.email_body || ''}
+        participantCount={participantCount}
+        onSend={handleSendEmails}
+        onClose={() => setSendConfirmOpen(false)}
       />
     </div>
   );
