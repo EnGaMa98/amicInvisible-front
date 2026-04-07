@@ -21,11 +21,7 @@ export default function AssignmentCard({ assignment, onResend, isAdmin }) {
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold-100 text-sm font-bold text-gold-600">
           {giver.fields.name.charAt(0).toUpperCase()}
         </div>
-        {isAdmin ? (
-          <span className="text-sm font-semibold text-gray-900 truncate">{giver.fields.name}</span>
-        ) : (
-          <span className="text-sm font-semibold text-gray-400 select-none blur-sm">██████</span>
-        )}
+        <span className="text-sm font-semibold text-gray-900 truncate">{giver.fields.name}</span>
       </div>
 
       <ArrowRight className="h-4 w-4 shrink-0 text-gray-300" />
