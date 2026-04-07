@@ -12,6 +12,10 @@ const AssignmentsService = {
   sendEmails: (groupId, data = {}) => {
     return api.post(`/groups/${groupId}/send-emails`, data);
   },
+
+  sendEmailToParticipant: (groupId, participantId) => {
+    return api.post(`/groups/${groupId}/send-email/${participantId}`);
+  },
 };
 
 export default AssignmentsService;

@@ -87,6 +87,13 @@ export default function GroupDetail() {
     fetchGroup();
   };
 
+  const handleResendToParticipant = async (participantId) => {
+    await execute(() => AssignmentsService.sendEmailToParticipant(id, participantId), {
+      successMessage: 'Correu enviat!',
+    });
+    fetchGroup();
+  };
+
   if (loading) return <LoadingSpinner />;
   if (!group) return null;
 
@@ -94,7 +101,7 @@ export default function GroupDetail() {
   const participantCount = group.participants?.length || 0;
   const hasAssignments = group.assignments?.length > 0;
   const canDraw = participantCount >= 2;
-  const canSend = fields.status === 'drawn' && hasAssignments;
+  const canSend = (fields.status === 'drawn' || fields.status === 'sent') && hasAssignments;
 
   return (
     <div>
@@ -184,11 +191,11 @@ export default function GroupDetail() {
         {hasAssignments && (
           <button
             onClick={() => setSendConfirmOpen(true)}
-            disabled={!canSend && fields.status !== 'drawn'}
+            disabled={!canSend}
             className="flex items-center gap-2 rounded-xl bg-pine-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-pine-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Send className="h-4 w-4" />
-            Enviar correus
+            {fields.status === 'sent' ? 'Reenviar correus' : 'Enviar correus'}
           </button>
         )}
         {!canDraw && participantCount < 2 && (
@@ -201,7 +208,7 @@ export default function GroupDetail() {
       {/* Assignments (admin only) */}
       {isAdmin && hasAssignments && (
         <div className="mt-6">
-          <AssignmentsList assignments={group.assignments} />
+          <AssignmentsList assignments={group.assignments} onResend={handleResendToParticipant} />
         </div>
       )}
 

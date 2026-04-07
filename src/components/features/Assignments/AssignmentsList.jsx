@@ -1,7 +1,7 @@
 import { Sparkles } from 'lucide-react';
 import AssignmentCard from './AssignmentCard';
 
-export default function AssignmentsList({ assignments }) {
+export default function AssignmentsList({ assignments, onResend }) {
   if (!assignments || assignments.length === 0) return null;
 
   return (
@@ -12,7 +12,7 @@ export default function AssignmentsList({ assignments }) {
       </h2>
       <div className="mt-3 space-y-2">
         {assignments.map((a) => (
-          <AssignmentCard key={a.id} assignment={a} />
+          <AssignmentCard key={a.id} assignment={a} onResend={onResend} />
         ))}
       </div>
     </div>
