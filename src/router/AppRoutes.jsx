@@ -5,6 +5,7 @@ import LoginPage from '@/components/features/Auth/LoginPage';
 import GroupsList from '@/components/features/Groups/GroupsList';
 import GroupDetail from '@/components/features/Groups/GroupDetail';
 import UsersList from '@/components/features/Users/UsersList';
+import PublicAssignmentPage from '@/components/features/Public/PublicAssignmentPage';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 
 function PrivateRoute({ children }) {
@@ -42,6 +43,7 @@ export default function AppRoutes() {
       <Route path="/" element={<PrivateRoute><GroupsList /></PrivateRoute>} />
       <Route path="/groups/:id" element={<PrivateRoute><GroupDetail /></PrivateRoute>} />
       <Route path="/users" element={<AdminRoute><UsersList /></AdminRoute>} />
+      <Route path="/p/:token" element={<PublicAssignmentPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
