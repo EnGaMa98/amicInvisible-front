@@ -28,7 +28,7 @@ export default function GroupDetail() {
 
   const fetchGroup = useCallback(async () => {
     try {
-      const include = isAdmin ? 'participants,assignments' : 'participants';
+      const include = 'participants,assignments';
       const response = await execute(
         () => GroupsService.get(id, include),
         { showLoading: false }
@@ -205,10 +205,9 @@ export default function GroupDetail() {
         )}
       </div>
 
-      {/* Assignments (admin only) */}
-      {isAdmin && hasAssignments && (
+      {hasAssignments && (
         <div className="mt-6">
-          <AssignmentsList assignments={group.assignments} onResend={handleResendToParticipant} />
+          <AssignmentsList assignments={group.assignments} onResend={handleResendToParticipant} isAdmin={isAdmin} />
         </div>
       )}
 

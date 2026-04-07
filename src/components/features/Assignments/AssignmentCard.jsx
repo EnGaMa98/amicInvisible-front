@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { ArrowRight, CheckCircle2, Clock, Send, Loader2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock, Send, Loader2, EyeOff } from 'lucide-react';
 
-export default function AssignmentCard({ assignment, onResend }) {
+export default function AssignmentCard({ assignment, onResend, isAdmin }) {
   const { giver, receiver, fields } = assignment;
   const isSent = !!fields.sent_at;
   const [sending, setSending] = useState(false);
@@ -21,16 +21,24 @@ export default function AssignmentCard({ assignment, onResend }) {
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold-100 text-sm font-bold text-gold-600">
           {giver.fields.name.charAt(0).toUpperCase()}
         </div>
-        <span className="text-sm font-semibold text-gray-900 truncate">{giver.fields.name}</span>
+        {isAdmin ? (
+          <span className="text-sm font-semibold text-gray-900 truncate">{giver.fields.name}</span>
+        ) : (
+          <span className="text-sm font-semibold text-gray-400 select-none blur-sm">██████</span>
+        )}
       </div>
 
       <ArrowRight className="h-4 w-4 shrink-0 text-gray-300" />
 
       <div className="flex items-center gap-2.5 min-w-0 flex-1">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pine-100 text-sm font-bold text-pine-600">
-          {receiver.fields.name.charAt(0).toUpperCase()}
+          {isAdmin ? receiver.fields.name.charAt(0).toUpperCase() : '?'}
         </div>
-        <span className="text-sm font-semibold text-gray-900 truncate">{receiver.fields.name}</span>
+        {isAdmin ? (
+          <span className="text-sm font-semibold text-gray-900 truncate">{receiver.fields.name}</span>
+        ) : (
+          <span className="text-sm font-semibold text-gray-400 select-none blur-sm">██████</span>
+        )}
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
@@ -43,7 +51,7 @@ export default function AssignmentCard({ assignment, onResend }) {
           onClick={handleResend}
           disabled={sending}
           className="rounded-lg p-2 text-gray-400 hover:text-pine-500 hover:bg-pine-50 transition-colors disabled:opacity-40"
-          title={`Enviar correu a ${giver.fields.name}`}
+          title={isAdmin ? `Enviar correu a ${giver.fields.name}` : 'Reenviar correu'}
         >
           {sending ? (
             <Loader2 className="h-4 w-4 animate-spin" />
