@@ -6,13 +6,13 @@ export default function AssignmentsList({ assignments, onResend, isAdmin }) {
 
   return (
     <div>
-      <h2 className="flex items-center gap-2 text-lg font-bold text-gray-900">
+      <h2 className="display-title flex items-center gap-2 text-2xl text-ink">
         <Sparkles className="h-5 w-5 text-gold-500" />
         Assignacions
       </h2>
-      <div className="mt-3 space-y-2">
-        {assignments.map((a) => (
-          <AssignmentCard key={a.id} assignment={a} onResend={onResend} isAdmin={isAdmin} />
+      <div className="mt-4 space-y-2">
+        {assignments.map((assignment) => (
+          <AssignmentCard key={assignment.id} assignment={assignment} onResend={onResend} isAdmin={isAdmin} />
         ))}
       </div>
     </div>

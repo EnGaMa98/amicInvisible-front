@@ -25,10 +25,10 @@ export function SnackbarProvider({ children }) {
     <SnackbarContext.Provider value={{ openSnackbar }}>
       {children}
       {snackbar && (
-        <div className="fixed bottom-6 right-6 z-50 animate-slide-up">
+        <div className="fixed bottom-4 left-4 right-4 z-50 animate-slide-up sm:bottom-6 sm:left-auto sm:right-6">
           <div
-            className={`flex items-center gap-3 rounded-xl px-5 py-3 shadow-lg text-white ${
-              snackbar.type === 'success' ? 'bg-pine-500' : 'bg-festive-500'
+            className={`flex items-center gap-3 rounded-xl px-5 py-3 text-white shadow-lg ${
+              snackbar.type === 'success' ? 'bg-success-600' : 'bg-danger-600'
             }`}
           >
             {snackbar.type === 'success' ? (

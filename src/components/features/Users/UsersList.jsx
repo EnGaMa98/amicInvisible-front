@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Plus, Trash2, Users } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import UsersService from '@/api/services/UsersService';
 import { useApi } from '@/hooks/useApi';
 import EmptyState from '@/components/shared/EmptyState';
 import ConfirmDialog from '@/components/shared/ConfirmDialog';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import UserForm from './UserForm';
+import Button from '@/components/shared/Button';
+import PageHeader from '@/components/shared/PageHeader';
 
 export default function UsersList() {
   const { execute } = useApi();
@@ -50,16 +52,17 @@ export default function UsersList() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Usuaris autoritzats</h1>
-        <button
-          onClick={() => setFormOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-festive-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-festive-600 transition-colors"
-        >
-          <Plus className="h-4 w-4" />
-          Afegir usuari
-        </button>
-      </div>
+      <PageHeader
+        eyebrow="Administració"
+        title="Usuaris autoritzats"
+        description="Gestiona les persones que poden accedir i crear els seus propis grups."
+        action={(
+          <Button onClick={() => setFormOpen(true)}>
+            <Plus className="h-4 w-4" />
+            Afegir usuari
+          </Button>
+        )}
+      />
 
       {users.length === 0 ? (
         <div className="mt-8">
@@ -70,43 +73,43 @@ export default function UsersList() {
           />
         </div>
       ) : (
-        <div className="mt-6 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <table className="w-full">
-            <thead className="border-b border-gray-100 bg-gray-50/50">
+        <div className="editorial-surface mt-8 overflow-x-auto rounded-2xl">
+          <table className="w-full min-w-160">
+            <thead className="border-b border-line bg-surface-muted/55">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-ink-muted">
                   Nom
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-ink-muted">
                   Correu
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-ink-muted">
                   Rol
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-right text-xs font-bold uppercase tracking-wider text-ink-muted">
                   Accions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-line">
               {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50/50 transition-colors">
+                <tr key={user.id} className="transition-colors hover:bg-brand-50/35">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-pine-100 text-sm font-semibold text-pine-700">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-100 text-sm font-semibold text-brand-700">
                         {user.fields.name.charAt(0).toUpperCase()}
                       </div>
-                      <span className="text-sm font-medium text-gray-900">{user.fields.name}</span>
+                      <span className="text-sm font-semibold text-ink">{user.fields.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{user.fields.email}</td>
+                  <td className="px-6 py-4 text-sm text-ink-muted">{user.fields.email}</td>
                   <td className="px-6 py-4">
                     {user.fields.is_admin ? (
-                      <span className="inline-flex items-center rounded-full bg-gold-100 px-2.5 py-0.5 text-xs font-medium text-gold-600">
+                      <span className="inline-flex items-center rounded-full bg-gold-50 px-2.5 py-1 text-xs font-semibold text-gold-600">
                         Admin
                       </span>
                     ) : (
-                      <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                      <span className="inline-flex items-center rounded-full bg-surface-muted px-2.5 py-1 text-xs font-semibold text-ink-muted">
                         Usuari
                       </span>
                     )}
@@ -115,7 +118,7 @@ export default function UsersList() {
                     {!user.fields.is_admin && (
                       <button
                         onClick={() => setDeleteTarget(user)}
-                        className="rounded-lg p-1.5 text-gray-400 hover:bg-festive-50 hover:text-festive-500 transition-colors"
+                        className="rounded-lg p-2 text-ink-muted transition-colors hover:bg-danger-50 hover:text-danger-600"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>

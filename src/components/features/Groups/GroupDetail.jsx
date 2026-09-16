@@ -12,6 +12,7 @@ import GroupForm from './GroupForm';
 import ParticipantsList from '@/components/features/Participants/ParticipantsList';
 import AssignmentsList from '@/components/features/Assignments/AssignmentsList';
 import SendEmailsForm from '@/components/features/Assignments/SendEmailsForm';
+import Button from '@/components/shared/Button';
 
 export default function GroupDetail() {
   const { id } = useParams();
@@ -37,7 +38,7 @@ export default function GroupDetail() {
     } finally {
       setLoading(false);
     }
-  }, [id, execute, isAdmin]);
+  }, [id, execute]);
 
   useEffect(() => {
     fetchGroup();
@@ -105,55 +106,55 @@ export default function GroupDetail() {
 
   return (
     <div>
-      {/* Back + Actions */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"
+          className="flex items-center gap-2 self-start text-sm font-semibold text-ink-muted transition-colors hover:text-ink"
         >
           <ArrowLeft className="h-4 w-4" />
-          Tornar
+          Tots els grups
         </button>
-        <div className="flex items-center gap-2">
-          <button
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
             onClick={() => setDuplicateOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            variant="secondary"
+            size="sm"
           >
             <Copy className="h-4 w-4" />
             Duplicar
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setEditOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            variant="secondary"
+            size="sm"
           >
             <Pencil className="h-4 w-4" />
             Editar
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setDeleteOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-festive-200 px-3 py-2 text-sm font-medium text-festive-600 hover:bg-festive-50 transition-colors"
+            variant="danger"
+            size="sm"
           >
             <Trash2 className="h-4 w-4" />
             Eliminar
-          </button>
+          </Button>
         </div>
       </div>
 
-      {/* Header */}
-      <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-        <div className="flex items-start justify-between">
-          <div>
-            <StatusBadge status={fields.status} />
-            <h1 className="mt-2 text-2xl font-bold text-gray-900">{fields.name}</h1>
-            {fields.description && (
-              <p className="mt-1 text-gray-500">{fields.description}</p>
-            )}
-          </div>
+      <div className="editorial-surface relative mt-6 overflow-hidden rounded-2xl p-6 sm:p-8">
+        <div className="absolute inset-y-0 left-0 w-1 bg-brand-700" />
+        <StatusBadge status={fields.status} />
+        <div className="mt-4 max-w-3xl">
+          <h1 className="display-title text-3xl text-ink sm:text-4xl">{fields.name}</h1>
+          {fields.description && (
+            <p className="mt-2 text-sm leading-6 text-ink-muted sm:text-base">{fields.description}</p>
+          )}
         </div>
-        <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-500">
+        <div className="mt-6 flex flex-wrap gap-3 text-sm text-ink-muted">
           {fields.event_date && (
-            <span className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4" />
+            <span className="flex items-center gap-2 rounded-lg bg-surface-muted px-3 py-2">
+              <Calendar className="h-4 w-4 text-brand-600" />
               {new Date(fields.event_date).toLocaleDateString('ca-ES', {
                 weekday: 'long',
                 year: 'numeric',
@@ -163,43 +164,41 @@ export default function GroupDetail() {
             </span>
           )}
           {fields.budget && (
-            <span className="flex items-center gap-1.5">
-              <Euro className="h-4 w-4" />
+            <span className="flex items-center gap-2 rounded-lg bg-surface-muted px-3 py-2">
+              <Euro className="h-4 w-4 text-brand-600" />
               {parseFloat(fields.budget).toFixed(2)} €
             </span>
           )}
         </div>
       </div>
 
-      {/* Participants */}
-      <div className="mt-6">
+      <div className="mt-8">
         <ParticipantsList groupId={id} participants={group.participants || []} onUpdate={fetchGroup} />
       </div>
 
-      {/* Actions */}
-      <div className="mt-6 flex flex-wrap gap-3">
+      <div className="mt-8 flex flex-wrap items-center gap-3 border-y border-line py-5">
         {(fields.status === 'draft' || fields.status === 'ready' || fields.status === 'drawn') && (
-          <button
+          <Button
             onClick={() => setDrawConfirmOpen(true)}
             disabled={!canDraw}
-            className="flex items-center gap-2 rounded-xl bg-gold-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gold-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="bg-gold-600 hover:bg-gold-500"
           >
             <Shuffle className="h-4 w-4" />
             {hasAssignments ? 'Refer el sorteig' : 'Fer el sorteig'}
-          </button>
+          </Button>
         )}
         {hasAssignments && (
-          <button
+          <Button
             onClick={() => setSendConfirmOpen(true)}
             disabled={!canSend}
-            className="flex items-center gap-2 rounded-xl bg-pine-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-pine-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            variant="success"
           >
             <Send className="h-4 w-4" />
             {fields.status === 'sent' ? 'Reenviar correus' : 'Enviar correus'}
-          </button>
+          </Button>
         )}
         {!canDraw && participantCount < 2 && (
-          <p className="flex items-center text-sm text-gray-400">
+          <p className="flex items-center text-sm text-ink-muted">
             Necessites almenys 2 participants per fer el sorteig
           </p>
         )}
@@ -211,7 +210,6 @@ export default function GroupDetail() {
         </div>
       )}
 
-      {/* Modals */}
       <GroupForm open={editOpen} group={group} onSave={handleEdit} onClose={() => setEditOpen(false)} />
       <GroupForm open={duplicateOpen} group={group} onSave={handleDuplicate} onClose={() => setDuplicateOpen(false)} title="Duplicar grup" submitLabel="Duplicar" />
 

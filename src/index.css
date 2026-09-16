@@ -1,23 +1,96 @@
 @import "tailwindcss";
 
 @theme {
-  --color-festive-50: #fef2f2;
-  --color-festive-100: #fee2e2;
-  --color-festive-500: #dc2626;
-  --color-festive-600: #b91c1c;
-  --color-festive-700: #991b1b;
+  --font-sans: "Avenir Next", Avenir, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
 
-  --color-gold-50: #fefce8;
-  --color-gold-100: #fef3c7;
-  --color-gold-500: #d97706;
-  --color-gold-600: #b45309;
+  --color-canvas: #f5f2eb;
+  --color-surface: #fffdf9;
+  --color-surface-muted: #eee9df;
+  --color-ink: #282b27;
+  --color-ink-muted: #6e7068;
+  --color-line: #ded8cc;
 
-  --color-pine-50: #ecfdf5;
-  --color-pine-100: #d1fae5;
-  --color-pine-500: #059669;
-  --color-pine-600: #047857;
+  --color-brand-50: #edf2ed;
+  --color-brand-100: #d9e4db;
+  --color-brand-500: #496652;
+  --color-brand-600: #3c5544;
+  --color-brand-700: #304438;
+  --color-brand-800: #24362b;
+
+  --color-accent-50: #f6eeeb;
+  --color-accent-100: #ead8d1;
+  --color-accent-500: #955c4d;
+  --color-accent-600: #7e4c40;
+  --color-accent-700: #683d34;
+
+  --color-gold-50: #f7f3e7;
+  --color-gold-100: #e9dfbd;
+  --color-gold-500: #9b7a33;
+  --color-gold-600: #806329;
+
+  --color-success-50: #edf4ef;
+  --color-success-100: #d8e8dc;
+  --color-success-500: #4e765b;
+  --color-success-600: #3e614a;
+
+  --color-danger-50: #f8eeee;
+  --color-danger-100: #efd8d7;
+  --color-danger-500: #a65450;
+  --color-danger-600: #8e4542;
 
   --animate-slide-up: slide-up 0.3s ease-out;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    background: var(--color-canvas);
+  }
+
+  body {
+    min-width: 320px;
+    margin: 0;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
+  }
+}
+
+@layer components {
+  .display-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  .editorial-surface {
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    box-shadow: 0 1px 2px rgba(40, 43, 39, 0.04), 0 12px 32px rgba(40, 43, 39, 0.04);
+  }
 }
 
 @keyframes slide-up {

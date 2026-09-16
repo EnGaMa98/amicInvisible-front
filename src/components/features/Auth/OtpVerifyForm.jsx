@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
-import { ArrowLeft, Loader2, ShieldCheck, RotateCcw } from 'lucide-react';
+import { ArrowLeft, RotateCcw, ShieldCheck } from 'lucide-react';
+import Button from '@/components/shared/Button';
 
 export default function OtpVerifyForm({ email, loading, onVerify, onBack, onResend }) {
   const [digits, setDigits] = useState(['', '', '', '', '', '']);
@@ -12,26 +13,24 @@ export default function OtpVerifyForm({ email, loading, onVerify, onBack, onRese
     newDigits[index] = value.slice(-1);
     setDigits(newDigits);
 
-    // Auto-focus next input
     if (value && index < 5) {
       inputsRef.current[index + 1]?.focus();
     }
 
-    // Auto-submit when all filled
-    if (newDigits.every((d) => d !== '')) {
+    if (newDigits.every((digit) => digit !== '')) {
       onVerify(newDigits.join(''));
     }
   };
 
-  const handleKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !digits[index] && index > 0) {
+  const handleKeyDown = (index, event) => {
+    if (event.key === 'Backspace' && !digits[index] && index > 0) {
       inputsRef.current[index - 1]?.focus();
     }
   };
 
-  const handlePaste = (e) => {
-    e.preventDefault();
-    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+  const handlePaste = (event) => {
+    event.preventDefault();
+    const pasted = event.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
     if (pasted.length === 6) {
       const newDigits = pasted.split('');
       setDigits(newDigits);
@@ -40,8 +39,8 @@ export default function OtpVerifyForm({ email, loading, onVerify, onBack, onRese
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     const code = digits.join('');
     if (code.length === 6) {
       onVerify(code);
@@ -50,50 +49,49 @@ export default function OtpVerifyForm({ email, loading, onVerify, onBack, onRese
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="text-center mb-6">
-        <ShieldCheck className="mx-auto h-10 w-10 text-pine-500" />
-        <h2 className="mt-3 text-lg font-semibold text-gray-900">Verificació</h2>
-        <p className="mt-1 text-sm text-gray-500">
-          Hem enviat un codi a <span className="font-medium text-gray-700">{email}</span>
+      <div className="mb-7 text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-success-50 text-success-600">
+          <ShieldCheck className="h-6 w-6" />
+        </div>
+        <h2 className="display-title mt-4 text-2xl text-ink">Comprova el correu</h2>
+        <p className="mt-2 text-sm leading-6 text-ink-muted">
+          Hem enviat un codi a <span className="font-semibold text-ink">{email}</span>
         </p>
       </div>
 
-      {/* OTP Inputs */}
-      <div className="flex justify-center gap-2.5">
-        {digits.map((digit, i) => (
+      <div className="flex justify-center gap-1.5 sm:gap-2.5">
+        {digits.map((digit, index) => (
           <input
-            key={i}
-            ref={(el) => (inputsRef.current[i] = el)}
+            key={index}
+            ref={(element) => (inputsRef.current[index] = element)}
             type="text"
             inputMode="numeric"
             maxLength={1}
             value={digit}
-            onChange={(e) => handleChange(i, e.target.value)}
-            onKeyDown={(e) => handleKeyDown(i, e)}
-            onPaste={i === 0 ? handlePaste : undefined}
-            autoFocus={i === 0}
-            className="h-13 w-11 rounded-xl border border-gray-300 text-center text-xl font-bold text-gray-900 focus:border-festive-500 focus:outline-none focus:ring-2 focus:ring-festive-500/20 transition-colors"
+            onChange={(event) => handleChange(index, event.target.value)}
+            onKeyDown={(event) => handleKeyDown(index, event)}
+            onPaste={index === 0 ? handlePaste : undefined}
+            autoFocus={index === 0}
+            aria-label={`Dígit ${index + 1}`}
+            className="h-12 w-10 rounded-xl border border-line bg-surface text-center text-lg font-bold text-ink outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 sm:h-13 sm:w-11"
           />
         ))}
       </div>
 
-      <button
+      <Button
         type="submit"
-        disabled={loading || digits.some((d) => !d)}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-festive-500 py-3 text-sm font-semibold text-white shadow-sm hover:bg-festive-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        loading={loading}
+        disabled={digits.some((digit) => !digit)}
+        className="mt-6 w-full"
       >
-        {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          'Verificar'
-        )}
-      </button>
+        Verificar
+      </Button>
 
       <div className="mt-4 flex items-center justify-between">
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          className="flex items-center gap-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-ink"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Canviar correu
@@ -102,7 +100,7 @@ export default function OtpVerifyForm({ email, loading, onVerify, onBack, onRese
           type="button"
           onClick={onResend}
           disabled={loading}
-          className="flex items-center gap-1 text-sm text-festive-500 hover:text-festive-600 transition-colors disabled:opacity-40"
+          className="flex items-center gap-1.5 text-sm font-medium text-brand-600 transition-colors hover:text-brand-800 disabled:opacity-40"
         >
           <RotateCcw className="h-3.5 w-3.5" />
           Reenviar codi

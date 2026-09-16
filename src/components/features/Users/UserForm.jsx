@@ -1,78 +1,47 @@
-import { useEffect, useState } from 'react';
-import { X, UserPlus } from 'lucide-react';
+import { useState } from 'react';
+import { UserPlus } from 'lucide-react';
+import Button from '@/components/shared/Button';
+import Dialog from '@/components/shared/Dialog';
+import FormField, { fieldClassName } from '@/components/shared/FormField';
 
 export default function UserForm({ open, onSave, onClose }) {
+  if (!open) return null;
+
+  return <UserFormContent onSave={onSave} onClose={onClose} />;
+}
+
+function UserFormContent({ onSave, onClose }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
-  useEffect(() => {
-    if (open) {
-      setName('');
-      setEmail('');
-    }
-  }, [open]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     onSave({ fields: { name: name.trim(), email: email.trim() } });
   };
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl animate-slide-up">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <UserPlus className="h-5 w-5 text-festive-500" />
-            <h2 className="text-lg font-semibold text-gray-900">Afegir usuari</h2>
-          </div>
-          <button onClick={onClose} className="rounded-lg p-1 text-gray-400 hover:text-gray-600 transition-colors">
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              autoFocus
-              className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-festive-500 focus:outline-none focus:ring-2 focus:ring-festive-500/20"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Correu electrònic</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-festive-500 focus:outline-none focus:ring-2 focus:ring-festive-500/20"
-            />
-          </div>
-
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-xl border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              Cancel·lar
-            </button>
-            <button
-              type="submit"
-              disabled={!name.trim() || !email.trim()}
-              className="rounded-xl bg-festive-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-festive-600 transition-colors disabled:opacity-40"
-            >
-              Afegir
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Dialog
+      open
+      title="Afegir usuari"
+      description="Autoritza una nova persona perquè pugui accedir a l'aplicació."
+      icon={<UserPlus className="h-4 w-4" />}
+      onClose={onClose}
+      maxWidth="max-w-md"
+      footer={(
+        <>
+          <Button variant="secondary" onClick={onClose}>Cancel·lar</Button>
+          <Button type="submit" form="user-form" disabled={!name.trim() || !email.trim()}>Afegir</Button>
+        </>
+      )}
+    >
+      <form id="user-form" onSubmit={handleSubmit} className="space-y-5">
+        <FormField label="Nom">
+          <input type="text" value={name} onChange={(event) => setName(event.target.value)} required autoFocus className={fieldClassName} />
+        </FormField>
+        <FormField label="Correu electrònic">
+          <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required className={fieldClassName} />
+        </FormField>
+      </form>
+    </Dialog>
   );
 }

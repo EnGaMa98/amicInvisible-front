@@ -5,6 +5,7 @@ import { useApi } from '@/hooks/useApi';
 import ParticipantRow from './ParticipantRow';
 import ParticipantForm from './ParticipantForm';
 import ConfirmDialog from '@/components/shared/ConfirmDialog';
+import Button from '@/components/shared/Button';
 
 export default function ParticipantsList({ groupId, participants, onUpdate }) {
   const { execute } = useApi();
@@ -42,31 +43,28 @@ export default function ParticipantsList({ groupId, participants, onUpdate }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-gray-900">
-          <Users className="h-5 w-5 text-gray-400" />
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="display-title flex items-center gap-2 text-2xl text-ink">
+          <Users className="h-5 w-5 text-brand-600" />
           Participants
-          <span className="text-sm font-normal text-gray-400">({participants.length})</span>
+          <span className="font-sans text-sm font-normal text-ink-muted">({participants.length})</span>
         </h2>
-        <button
-          onClick={openCreate}
-          className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-        >
+        <Button onClick={openCreate} variant="secondary" size="sm">
           <Plus className="h-4 w-4" />
           Afegir
-        </button>
+        </Button>
       </div>
 
       {participants.length === 0 ? (
-        <p className="mt-4 text-center text-sm text-gray-400 py-8">
+        <p className="mt-4 rounded-xl border border-dashed border-line bg-surface/50 py-10 text-center text-sm text-ink-muted">
           Encara no hi ha participants. Afegeix-ne!
         </p>
       ) : (
-        <div className="mt-3 space-y-2">
-          {participants.map((p) => (
+        <div className="mt-4 space-y-2">
+          {participants.map((participant) => (
             <ParticipantRow
-              key={p.id}
-              participant={p}
+              key={participant.id}
+              participant={participant}
               onEdit={openEdit}
               onDelete={setDeleting}
             />
